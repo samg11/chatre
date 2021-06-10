@@ -12,6 +12,10 @@ app.use(require('cors')());
 
 app.use('/api', require('./api').api);
 
+app.get('/', (req, res) => {
+    res.send('Chatre');
+})
+
 server.listen(PORT, () => {
     console.log(`Server is listening at http://localhost:${PORT}`);
 });
