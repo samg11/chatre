@@ -57,7 +57,6 @@ api.post('/signup', async (req, res) => {
 api.post('/login', async (req, res) => {
     try {
         const { usr, pwd } = req.body;
-        console.log(req.body)
         const userDocRef = db.collection('users').doc(usr);
         const user       = (await userDocRef.get()).data();
         if (user?.password === crypto.createHash("sha256").update(pwd).digest("base64")) {
@@ -66,7 +65,6 @@ api.post('/login', async (req, res) => {
             });
         } else {
             res.status(401).json({
-
                 failure: true,
                 msg: 'Incorrect Password'
             });
@@ -80,7 +78,7 @@ api.post('/login', async (req, res) => {
 });
 
 async function authenticate(usr, pwd) {
-    const user       = (await db.collection('users').doc(usr).get()).data();
+    const user = (await db.collection('users').doc(usr).get()).data();
     return user?.password === crypto.createHash("sha256").update(pwd).digest("base64");
 }
 

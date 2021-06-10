@@ -1,13 +1,13 @@
 const URL = 'http://localhost:8080';
 
 // const io = require('socket.io-client');
-const axios = require('axios');
 const $ = require('jquery');
+const fetch = require('node-fetch');
 require('bootstrap');
 
 $('#login-form').on('submit', async (e) => {
     e.preventDefault();
-    const auth = await signIn($('#lusr').val(), $('#lpwd').val());
+    const auth = await signIn($('#loginUsrInput').val(), $('#loginPwdInput').val());
 
     if (auth.failure) {
         alert(auth.msg);
@@ -19,9 +19,18 @@ $('#login-form').on('submit', async (e) => {
 })
 
 async function signIn(usr, pwd) {
-    const loginRequst = await axios.post(`${URL}/api/login`, { usr, pwd })
-        .catch(console.error)
-    
-    return loginRequst.data;
+    const res = await fetch(`${URL}/api/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            usr, pwd
+        })
+    })
+        .then(res => res.json())
+        .catch(console.error);
+
+    return res;
 
 }
