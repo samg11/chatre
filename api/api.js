@@ -1,17 +1,9 @@
 const express = require('express');
 const crypto = require('crypto');
 
+const { db, authenticate } = require('./db');
+
 const api = express();
-
-const admin = require('firebase-admin');
-require('dotenv').config();
-
-admin.initializeApp({
-    credential: admin.credential.applicationDefault()
-});
-  
-const db = admin.firestore();
-
 
 api.get('/', (req, res) => {
     res.json({
@@ -76,10 +68,5 @@ api.post('/login', async (req, res) => {
         });
     }
 });
-
-async function authenticate(usr, pwd) {
-    const user = (await db.collection('users').doc(usr).get()).data();
-    return user?.password === crypto.createHash("sha256").update(pwd).digest("base64");
-}
 
 exports.api = api;
